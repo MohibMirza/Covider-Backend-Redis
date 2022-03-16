@@ -8,6 +8,8 @@ public class Visit implements Serializable {
     private String userId;
     private Date date;
 
+    protected Visit() { }
+
     public Visit(String userId) {
         this.userId = userId;
         this.date = new Date();

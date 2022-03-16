@@ -1,7 +1,5 @@
 package redis.RClass;
 
-import org.redisson.RedissonList;
-import org.redisson.api.RList;
 import org.redisson.api.annotation.REntity;
 import org.redisson.api.annotation.RId;
 
@@ -20,6 +18,7 @@ public class User implements Serializable {
     private String lastName;
 
     private List<String> visitedBuildings;
+    private List<String> enrolledClasses;
     private boolean isInstructor;
 
     private CovidStatus covidStatus;
@@ -32,8 +31,9 @@ public class User implements Serializable {
         this.firstName = "John";
         this.lastName = "Doe";
         this.visitedBuildings = new ArrayList<String>();
+        this.enrolledClasses = new ArrayList<String>();
         this.isInstructor = false;
-        this.covidStatus = new CovidStatus('0', new Date());
+        this.covidStatus = new CovidStatus(Status.healthy, new Date());
     }
 
     public String getUserId(){
@@ -60,6 +60,10 @@ public class User implements Serializable {
         return visitedBuildings;
     }
 
+    public List<String> getEnrolledClasses() {
+        return enrolledClasses;
+    }
+
     public boolean getIsInstructor() {
         return isInstructor;
     }
@@ -78,6 +82,10 @@ public class User implements Serializable {
 
     public void setIsInstructor(boolean bool) {
         isInstructor = bool;
+    }
+
+    public void setCovidStatus(CovidStatus covidStatus) {
+        this.covidStatus = covidStatus;
     }
 
 }

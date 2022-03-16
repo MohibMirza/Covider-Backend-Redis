@@ -7,9 +7,7 @@ import org.junit.AfterClass;
 import static org.junit.Assert.*;
 
 import org.redisson.api.RLiveObjectService;
-import redis.RClass.Building;
-import redis.RClass.User;
-import redis.RClass.Visit;
+import redis.RClass.*;
 import redis.RedisClient;
 
 import java.util.Date;
@@ -66,17 +64,18 @@ public class RedisTest {
         user.setPassword(password);
         user.setIsInstructor(isInstructor);
         user.getVisitedBuildings().add("Home");
+        user.setCovidStatus(new CovidStatus(Status.infected, new Date()));
 
 
         User alteredUser = getOrCreateUser(username);
 
         assertEquals(password, alteredUser.getPassword());
         assertEquals(isInstructor, user.getIsInstructor());
-        assertEquals('0', alteredUser.getCovidStatus().getStatus());
+        assertEquals(Status.infected, alteredUser.getCovidStatus().getStatus());
         assertEquals("Home", user.getVisitedBuildings().get(0));
         assertEquals("John", alteredUser.getFirstName());
 
-        rlo.delete(user);
+        deleteUser(username);
         user = rlo.get(User.class, username);
         assertNull(user);
 
@@ -108,9 +107,7 @@ public class RedisTest {
     }
 
     @Test
-    public void userVisitsBuildingTest() {
-
-    }
+    public void userVisitsBuildingTest() { }
 
     @AfterClass
     public static void end() {
