@@ -1,8 +1,6 @@
 <!-- ABOUT THE PROJECT -->
 ## Tutorial
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 Firstly, make sure:
   1. Start redis by running 'redis-server' on command line
   2. Run RedisTest.java and make sure all tests pass
