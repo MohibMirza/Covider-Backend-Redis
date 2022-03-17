@@ -17,8 +17,12 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
 
+    private String class1;
+    private String class2;
+    private String class3;
+    private String class4;
+
     private List<String> visitedBuildings;
-    private List<String> enrolledClasses;
     private boolean isInstructor;
 
     private CovidStatus covidStatus;
@@ -30,8 +34,11 @@ public class User implements Serializable {
         this.password = "";
         this.firstName = "John";
         this.lastName = "Doe";
+        this.class1 = "";
+        this.class2 = "";
+        this.class3 = "";
+        this.class4 = "";
         this.visitedBuildings = new ArrayList<String>();
-        this.enrolledClasses = new ArrayList<String>();
         this.isInstructor = false;
         this.covidStatus = new CovidStatus(Status.healthy, new Date());
     }
@@ -52,16 +59,28 @@ public class User implements Serializable {
         return lastName;
     }
 
+    public String getClass1() {
+        return class1;
+    }
+
+    public String getClass2() {
+        return class2;
+    }
+
+    public String getClass3() {
+        return class3;
+    }
+
+    public String getClass4() {
+        return class4;
+    }
+
     public CovidStatus getCovidStatus() {
         return covidStatus;
     }
 
     public List<String> getVisitedBuildings() {
         return visitedBuildings;
-    }
-
-    public List<String> getEnrolledClasses() {
-        return enrolledClasses;
     }
 
     public boolean getIsInstructor() {
@@ -78,6 +97,22 @@ public class User implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setClass1(String className) {
+        this.class1 = className;
+    }
+
+    public void setClass2(String className) {
+        this.class2 = className;
+    }
+
+    public void setClass3(String className) {
+        this.class3 = className;
+    }
+
+    public void setClass4(String className) {
+        this.class4 = className;
     }
 
     public void setIsInstructor(boolean bool) {

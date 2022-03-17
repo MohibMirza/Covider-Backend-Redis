@@ -49,7 +49,6 @@ public class RedisDatabase {
         User user = rlo.get(User.class, userId);
         if(user != null) {
             user.getVisitedBuildings().clear();
-            user.getEnrolledClasses().clear();
             rlo.delete(user);
         }
     }
