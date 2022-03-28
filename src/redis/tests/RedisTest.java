@@ -7,9 +7,11 @@ import static org.junit.Assert.*;
 import org.redisson.api.RKeys;
 import org.redisson.api.RLiveObjectService;
 import redis.RClass.*;
+import redis.RClass.Class;
 import redis.RedisClient;
 
 import java.util.Date;
+import java.util.List;
 
 import static redis.RedisDatabase.*;
 
@@ -124,8 +126,39 @@ public class RedisTest {
         user.setCovidStatus(Status.symptomatic);
         assertEquals(998.0, building.getRiskScore(), 0.0);
 
+        user.setCovidStatus(Status.symptomatic);
+        assertEquals(998.0, building.getRiskScore(), 0.0);
+
         building.delete();
         user.delete();
+
+    }
+
+    @Test
+    public void userVisitsBuildingSimple() {
+        Building building = new Building("Leavey");
+        building.addVisit("Jonny");
+
+        User user = new User("Jonny");
+        user.addVisit("Leavey");
+        user.setCovidStatus(Status.infected);
+
+
+        assertEquals(995.0, building.getRiskScore(), 0.0);
+
+        building.delete();
+        user.delete();
+    }
+
+    @Test
+    public void addStudentToClass() {
+        Class csci = new Class("csci");
+        csci.addStudent("Jackson");
+
+        List<String> students = csci.getStudents();
+
+
+        assertEquals(1, students.size());
 
     }
 

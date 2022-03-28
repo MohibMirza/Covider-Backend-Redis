@@ -160,20 +160,26 @@ public class User implements Serializable {
         Set<Object> visitedBuildings = redisson.getMap(name + ".visitedBuildingCount").keySet();
         int penalty = 0;
         if(covidStatus == Status.symptomatic) {
+            if(getCovidStatus().compareTo("symptomatic") == 0) {
+                return;
+            }
             redisson.getBucket(name + ".covidStatus").set("symptomatic");
             penalty = 2;
         }else if(covidStatus == Status.infected) {
+            if(getCovidStatus().compareTo("infected") == 0) {
+                return;
+            }
             redisson.getBucket(name + ".covidStatus").set("infected");
             penalty = 5;
         }
+
+
 
         for(Object obj : visitedBuildings) {
             String buildingId = (String) obj;
             buildingId = buildingId.toLowerCase();
             Building building = new Building(buildingId);
-            System.out.println("UID: " + userId);
             if(building.checkIfVisitedWithin10Days(userId)){
-                System.out.println("Applying penalty");
                 building.decrementRiskScore(penalty);
             }
         }
