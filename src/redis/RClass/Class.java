@@ -1,6 +1,7 @@
 package redis.RClass;
 
 import org.redisson.api.RList;
+import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import redis.RedisClient;
 
@@ -21,7 +22,7 @@ public class Class {
 
         if(!redisson.getBucket(name + ".isInPerson").isExists()) {
             redisson.getBucket(name + ".isInPerson").set(true);
-            redisson.getList(name + ".students");
+            redisson.getSet(name + ".students");
         }
     }
 
@@ -34,14 +35,14 @@ public class Class {
     }
 
     public List<String> getStudents() {
-        RList<String> rList = redisson.getList(name + ".students");
-        List<String> students = rList.range(rList.size()-1);
+        RSet<String> rList = redisson.getSet(name + ".students");
+        List<String> students = rList.stream().toList();
         return students;
     }
 
     public void addStudent(String userId) {
         userId = userId.toLowerCase();
-        redisson.getList(name + ".students").add(userId);
+        redisson.getSet(name + ".students").add(userId);
     }
 
     public void setInPerson(boolean willBeInPerson) {

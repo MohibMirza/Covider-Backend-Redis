@@ -195,6 +195,7 @@ public class User implements Serializable {
         }
         visitedBuildingCount.put(buildingId, count+1);
 
+
     }
 
     public void delete() {
