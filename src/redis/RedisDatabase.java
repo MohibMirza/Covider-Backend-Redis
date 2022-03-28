@@ -40,7 +40,7 @@ public class RedisDatabase {
     public static void deleteBuilding(String buildingId) {
         Building building = rlo.get(Building.class, buildingId);
         if(building != null) {
-            building.getVisits().clear();
+            // building.getVisits().clear();
             rlo.delete(building);
         }
     }
@@ -48,32 +48,32 @@ public class RedisDatabase {
     public static void deleteUser(String userId)  {
         User user = rlo.get(User.class, userId);
         if(user != null) {
-            user.getVisitedBuildings().clear();
+            // user.getVisitedBuildings().clear();
             rlo.delete(user);
         }
     }
 
     public static void calculateRiskScore(String buildingId) {
         Building building = getOrCreateBuilding(buildingId);
-        List<Visit> visits = new ArrayList<>(building.getVisits());
+        // List<Visit> visits = new ArrayList<>(building.getVisits());
 
         int score = 0;
         int numberOfVisits = 0;
-        for(Visit visit : visits) {
-            User user = rlo.get(User.class, visit.getUserId());
-            if(user == null) continue;
-
-            Status status = user.getCovidStatus().getStatus();
-
-            if(status == Status.healthy) {
-                score += 0;
-            }else if(status == Status.symptomatic) {
-                score += 1;
-            }else if(status == Status.infected) {
-                score += 2;
-            }
-            numberOfVisits++;
-        }
+//        for(Visit visit : visits) {
+//            User user = rlo.get(User.class, visit.getUserId());
+//            if(user == null) continue;
+//
+//            Status status = user.getCovidStatus().getStatus();
+//
+//            if(status == Status.healthy) {
+//                score += 0;
+//            }else if(status == Status.symptomatic) {
+//                score += 1;
+//            }else if(status == Status.infected) {
+//                score += 2;
+//            }
+//            numberOfVisits++;
+//        }
 
         double avg = score / numberOfVisits;
 

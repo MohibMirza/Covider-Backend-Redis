@@ -1,11 +1,10 @@
 package redis.tests;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.AfterClass;
+import org.junit.*;
+
 import static org.junit.Assert.*;
 
+import org.redisson.api.RKeys;
 import org.redisson.api.RLiveObjectService;
 import redis.RClass.*;
 import redis.RedisClient;
@@ -17,37 +16,69 @@ import static redis.RedisDatabase.*;
 public class RedisTest {
 
     public static RedisClient redis;
-    public static RLiveObjectService rlo;
+
+    public static long keyCount;
 
     @BeforeClass
     public static void init() {
         redis = new RedisClient("redis://127.0.0.1:6379");
         redis.start();
-        rlo = redis.redisson.getLiveObjectService();
-        rlo.unregisterClass(User.class);
-        rlo.unregisterClass(Building.class);
-        rlo.registerClass(User.class);
-        rlo.registerClass(Building.class);
     }
 
     @Before
-    public void setup() {
-        System.out.println("Performing Test");
+    public void before() {
+        RKeys rKeys = redis.redisson.getKeys();
+        keyCount = rKeys.count();
+    }
+
+    @After
+    public void after() {
+        RKeys rKeys = redis.redisson.getKeys();
+        assertEquals(keyCount, rKeys.count());
     }
 
     @Test
     public void userAddThenDeleteTest() {
-        String username = "MyUser";
+        User user = new User("Mark");
+        assertEquals("", user.getPassword());
+        assertEquals("John", user.getFirstName());
+        assertEquals("Doe", user.getLastName());
+        assertEquals(false, user.getIsInstructor());
+        assertEquals("healthy", user.getCovidStatus());
+        assertEquals("", user.getClass1());
+        assertEquals("", user.getClass2());
+        assertEquals("", user.getClass3());
+        assertEquals("", user.getClass4());
+        assertEquals("", user.getClass5());
 
-        User user = getOrCreateUser(username);
 
-        assertNotNull(user);
+        user.setPassword("password123");
+        user.setFirstName("Joe");
+        user.setLastName("Carr");
+        user.setIsInstructor(true);
+        user.setCovidStatus(Status.infected);
+        user.setClass1("CSCI-103");
+        user.setClass2("CSCI-104");
+        user.setClass3("CSCI-109");
+        user.setClass4("EE-109");
+        user.setClass5("PHYS-151");
 
-        deleteUser(username);
+        User user1 = new User("Mark");
 
-        user = rlo.get(User.class, username);
+        assertEquals("password123", user1.getPassword());
+        assertEquals("Joe", user1.getFirstName());
+        assertEquals("Carr", user1.getLastName());
+        assertEquals(true, user1.getIsInstructor());
+        assertEquals("infected", user1.getCovidStatus());
+        assertEquals("CSCI-103", user1.getClass1());
+        assertEquals("CSCI-104", user1.getClass2());
+        assertEquals("CSCI-109", user1.getClass3());
+        assertEquals("EE-109", user1.getClass4());
+        assertEquals("PHYS-151", user1.getClass5());
 
-        assertNull(user);
+        user.delete();
+
+
     }
 
     public static String password = "applejack";
@@ -55,59 +86,48 @@ public class RedisTest {
 
     @Test
     public void userDataTest() throws InterruptedException {
-        String username = "ujkihi";
-        long timestamp = System.currentTimeMillis();
 
-        User user = getOrCreateUser(username);
-        assertNotNull(user);
-
-        user.setPassword(password);
-        user.setIsInstructor(isInstructor);
-        user.getVisitedBuildings().add("Home");
-        user.setCovidStatus(new CovidStatus(Status.infected, new Date()));
-
-
-        User alteredUser = getOrCreateUser(username);
-
-        assertEquals(password, alteredUser.getPassword());
-        assertEquals(isInstructor, user.getIsInstructor());
-        assertEquals(Status.infected, alteredUser.getCovidStatus().getStatus());
-        assertEquals("Home", user.getVisitedBuildings().get(0));
-        assertEquals("John", alteredUser.getFirstName());
-
-        deleteUser(username);
-        user = rlo.get(User.class, username);
-        assertNull(user);
 
     }
 
     @Test
-    public void buildingAddThenDeleteTest() {
-        String buildingName = "SAL";
-        String visitorId = "dewy";
-        Building building = getOrCreateBuilding(buildingName);
+    public void buildingAddThenDeleteTest() throws InterruptedException {
+        Building building = new Building("RTH");
+        assertEquals(1000.0, building.getRiskScore(), 0.0);
+        building.setRiskScore(990.0);
+        assertEquals(990.0, building.getRiskScore(), 0.0);
 
-        building.setRiskScore(5.0);
-        building.getVisits().add(new Visit(visitorId));
 
-        Building alteredBuilding = getOrCreateBuilding(buildingName);
+        Building building1 = new Building("RTH");
+        assertEquals(990.0, building1.getRiskScore(), 0.0);
 
-        assertEquals(5.0, alteredBuilding.getRiskScore(), 0.0);
-        assertEquals(1, alteredBuilding.getVisits().size());
-        assertEquals(visitorId, alteredBuilding.getVisits().get(0).getUserId());
+        building1.decrementRiskScore(5);
+        assertEquals(985.0, building1.getRiskScore(), 0.0);
 
-        // Makes sure the current date is after the date in the visit.
-        assertTrue((new Date()).after(alteredBuilding.getVisits().get(0).getDate()));
-
-        deleteBuilding(buildingName);
-
-        building = rlo.get(Building.class, buildingName);
-        assertNull(building);
+        building.delete();
 
     }
 
-    @Test
-    public void userVisitsBuildingTest() { }
+   @Test
+    public void userVisitsBuildingTest() {
+
+        Building building = new Building("SAL");
+        building.addLastVisit("Jake", "2022-03-25");
+        assertTrue(building.checkIfVisitedWithin10Days("Jake"));
+
+        User user = new User("Jake");
+        user.addVisit("SAL");
+        assertEquals(1, user.getBuildingVisitCount("SAL"));
+        user.addVisit("SAL");
+        assertEquals(2, user.getBuildingVisitCount("SAL"));
+
+        user.setCovidStatus(Status.symptomatic);
+        assertEquals(998.0, building.getRiskScore(), 0.0);
+
+        building.delete();
+        user.delete();
+
+    }
 
     @AfterClass
     public static void end() {
