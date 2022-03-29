@@ -61,7 +61,7 @@ public class DummyData {
         sarah.setPassword("1234");
 
 
-        Building building = new Building("JFF");
+        Building building = new Building("SAL");
         building.setLatitude(34.0187);
         building.setLongitude(-118.2826);
         Building building2 = new Building("SSL");
@@ -83,7 +83,6 @@ public class DummyData {
         joe.setPassword("test");
 
         redisClient.shutdown();
-
 
     }
 }
