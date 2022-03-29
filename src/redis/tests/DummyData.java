@@ -57,5 +57,9 @@ public class DummyData {
         building3.setLatitude(0.0);
         building3.setLongitude(0.0);
 
+        User joe = new User("joe");
+        joe.setPassword("test");
+
+
     }
 }

@@ -6,10 +6,7 @@ import org.redisson.api.RedissonClient;
 import redis.RedisClient;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class User implements Serializable {
 
@@ -143,6 +140,38 @@ public class User implements Serializable {
         redisson.getBucket(name + ".class5").set(className);
     }
 
+    public void setAllClassesRemote() {
+        Vector<String> classes = new Vector<>();
+        classes.add(getClass1());
+        classes.add(getClass2());
+        classes.add(getClass3());
+        classes.add(getClass4());
+        classes.add(getClass5());
+
+        for(String className : classes) {
+            if(className.compareTo("") != 0) {
+                Class clas = new Class(className);
+                clas.setInPerson(false);
+            }
+        }
+    }
+
+    public void setAllClassesLive() {
+        Vector<String> classes = new Vector<>();
+        classes.add(getClass1());
+        classes.add(getClass2());
+        classes.add(getClass3());
+        classes.add(getClass4());
+        classes.add(getClass5());
+
+        for(String className : classes) {
+            if(className.compareTo("") != 0) {
+                Class clas = new Class(className);
+                clas.setInPerson(true);
+            }
+        }
+    }
+
     public void setIsInstructor(boolean isInstructor) {
         if(isInstructor == true) {
             redisson.getBucket(name + ".isInstructor").set("true");
@@ -183,6 +212,24 @@ public class User implements Serializable {
                 building.decrementRiskScore(penalty);
             }
         }
+
+        if(getCovidStatus().compareTo("infected") == 0 && getIsInstructor()) {
+            Vector<String> classes = new Vector<>();
+            classes.add(getClass1());
+            classes.add(getClass2());
+            classes.add(getClass3());
+            classes.add(getClass4());
+            classes.add(getClass5());
+
+            for(String className : classes) {
+                if(className.compareTo("") != 0) {
+                    Class clas = new Class(className);
+                    clas.setInPerson(false);
+                }
+            }
+
+
+        }
     }
 
     public void addVisit(String buildingId) {
@@ -218,3 +265,4 @@ public class User implements Serializable {
     }
 
 }
+

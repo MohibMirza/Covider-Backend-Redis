@@ -168,6 +168,23 @@ public class RedisTest {
     public void tommyClassCheck() {
         Class csci = new Class("csci");
         assertNotNull(csci.getInPerson());
+        csci.delete();
+    }
+
+    @Test
+    public void instructorGotCovidTest() {
+        Class phys = new Class("phys");
+        User user = new User("kevin");
+        user.setIsInstructor(true);
+        user.setClass1("phys");
+        phys.addStudent("kevin");
+
+        user.setCovidStatus(Status.infected);
+
+        assertEquals(false, phys.getInPerson());
+
+        phys.delete();
+        user.delete();
     }
 
     @AfterClass
