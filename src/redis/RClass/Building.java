@@ -148,3 +148,4 @@ public class Building implements Serializable {
         return (redisson.getAtomicDouble("building." + buildingName.toLowerCase() + ".riskscore").isExists());
     }
 }
+
