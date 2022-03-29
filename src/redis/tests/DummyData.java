@@ -5,6 +5,10 @@ import redis.RClass.Class;
 import redis.RClass.Status;
 import redis.RClass.User;
 import redis.RedisClient;
+import redis.RedisDatabase;
+
+import java.util.List;
+import java.util.Random;
 
 public class DummyData {
 
@@ -27,6 +31,7 @@ public class DummyData {
         sam.setFirstName("Sam");
         sam.setLastName("Hill");
         sam.setPassword("1234");
+        randomizeVisits(sam);
 
         User john = new User("John");
         john.setClass1("csci_103");
@@ -36,6 +41,7 @@ public class DummyData {
         john.setFirstName("Johnny");
         john.setLastName("Test");
         john.setPassword("1234");
+        randomizeVisits(john);
 
         User mark = new User("Mark");
         mark.setClass1("ee-109");
@@ -47,6 +53,7 @@ public class DummyData {
         mark.setFirstName("Marko");
         mark.setLastName("Jacoby");
         mark.setPassword("1234");
+        randomizeVisits(mark);
 
 
         User sarah = new User("Sarah");
@@ -59,18 +66,22 @@ public class DummyData {
         sarah.setLastName("Hopkins");
         sarah.setCovidStatus(Status.infected);
         sarah.setPassword("1234");
+        randomizeVisits(sarah);
 
 
-        Building building = new Building("SAL");
+        Building building = new Building("JFF");
         building.setLatitude(34.0187);
         building.setLongitude(-118.2826);
+        building.setInstructions("Please wear double masks");
         Building building2 = new Building("SSL");
         building2.setLatitude(34.0196);
         building2.setLongitude(-118.2888);
+        building2.setInstructions("Wear green only");
         Building building3 = new Building("RTH");
         building3.setLatitude(34.0201);
         building3.setLongitude(-118.2899);
-        Building building4 = new Building("JFF");
+        building3.setInstructions("Enter thru front");
+        Building building4 = new Building("SAL");
         building4.setLatitude(34.0195);
         building4.setLongitude(-118.2895);
         Building building5 = new Building("HSH");
@@ -84,5 +95,18 @@ public class DummyData {
 
         redisClient.shutdown();
 
+    }
+
+    public static void randomizeVisits(User user) {
+        List<String> buildings = RedisDatabase.buildingNames;
+        Random random = new Random();
+        for(String s : buildings) {
+            int Min = 0;
+            int Max = 100;
+            int val = Min + (int)(Math.random() * ((Max - Min) + 1));
+            user.addVisits(s, val);
+//            System.out.println(user.getBuildingVisitCount(s));
+//            System.out.println(s);
+        }
     }
 }

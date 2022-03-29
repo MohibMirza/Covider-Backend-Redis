@@ -14,10 +14,12 @@ import java.util.Date;
 public class Building implements Serializable {
 
     private String name;
+    private String buildingId;
 
     private static RedissonClient redisson;
 
     public Building(String name) {
+        buildingId = name;
 
         this.name = "building." + name.toLowerCase();
 
@@ -75,7 +77,7 @@ public class Building implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return buildingId;
     }
 
     public double getRiskScore() {

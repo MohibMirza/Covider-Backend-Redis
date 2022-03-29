@@ -7,9 +7,12 @@ import redis.RClass.User;
 import redis.RClass.Visit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RedisDatabase {
+
+    public static List<String> buildingNames = Arrays.asList(new String[] { "SAL", "SSL", "RTH", "JFF", "HSH" });
 
     public static RLiveObjectService rlo = RedisClient.getInstance().redisson.getLiveObjectService();
 

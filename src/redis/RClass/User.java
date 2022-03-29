@@ -241,8 +241,17 @@ public class User implements Serializable {
             return;
         }
         visitedBuildingCount.put(buildingId, count+1);
+    }
 
-
+    public void addVisits(String buildingId, int times) {
+        buildingId = buildingId.toLowerCase();
+        RMap<String, Integer> visitedBuildingCount = redisson.getMap(name + ".visitedBuildingCount");
+        Integer count = visitedBuildingCount.get(buildingId);
+        if(count == null) {
+            visitedBuildingCount.put(buildingId, times);
+            return;
+        }
+        visitedBuildingCount.put(buildingId, count+times);
     }
 
     public void delete() {
