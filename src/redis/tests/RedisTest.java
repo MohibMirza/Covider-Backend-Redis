@@ -150,7 +150,7 @@ public class RedisTest {
         user.delete();
     }
 
-    @Test
+    // @Test
     public void addStudentToClass() {
         Class csci = new Class("csci");
         csci.addStudent("Jackson");
@@ -160,6 +160,14 @@ public class RedisTest {
 
         assertEquals(1, students.size());
 
+        csci.delete();
+
+    }
+
+    @Test
+    public void tommyClassCheck() {
+        Class csci = new Class("csci");
+        assertNotNull(csci.getInPerson());
     }
 
     @AfterClass
