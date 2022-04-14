@@ -5,12 +5,10 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import org.redisson.api.RKeys;
-import org.redisson.api.RLiveObjectService;
 import redis.RClass.*;
 import redis.RClass.Class;
 import redis.RedisClient;
 
-import java.util.Date;
 import java.util.List;
 
 import static redis.RedisDatabase.*;

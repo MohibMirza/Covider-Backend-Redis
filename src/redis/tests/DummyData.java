@@ -33,38 +33,40 @@ public class DummyData {
         sam.setPassword("1234");
         randomizeVisits(sam);
 
-        User john = new User("John");
+        String johnEmail = "john@gmail.com";
+        User john = new User(johnEmail);
         john.setClass1("csci_103");
-        csci_103.addStudent("John");
+        csci_103.addStudent(johnEmail);
         john.setClass2("ee-109");
-        ee_109.addStudent("John");
+        ee_109.addStudent(johnEmail);
         john.setFirstName("Johnny");
         john.setLastName("Test");
         john.setPassword("1234");
         randomizeVisits(john);
 
-        User mark = new User("Mark");
+        String markEmail = "mark@gmail.com";
+        User mark = new User(markEmail);
         mark.setClass1("ee-109");
-        ee_109.addStudent("Mark");
+        ee_109.addStudent(markEmail);
         mark.setClass2("csci_310");
-        csci_310.addStudent("Mark");
+        csci_310.addStudent(markEmail);
         mark.setClass3("csci_104");
-        csci_104.addStudent("Mark");
+        csci_104.addStudent(markEmail);
         mark.setFirstName("Marko");
         mark.setLastName("Jacoby");
         mark.setPassword("1234");
         randomizeVisits(mark);
 
-
-        User sarah = new User("Sarah");
+        String sarahEmail = "sarah@gmail.com";
+        User sarah = new User(sarahEmail);
         sarah.setClass1("ee-109");
-        ee_109.addStudent("Sarah");
-        sarah.setClass2("csci-104");
-        csci_104.addStudent("");
+        ee_109.addStudent(sarahEmail);
+        sarah.setClass2("csci_104");
+        csci_104.addStudent(sarahEmail);
         sarah.setIsInstructor(true);
         sarah.setFirstName("Sarah");
         sarah.setLastName("Hopkins");
-        sarah.setCovidStatus(Status.infected);
+        sarah.setCovidStatus(Status.healthy);
         sarah.setPassword("1234");
         randomizeVisits(sarah);
 
