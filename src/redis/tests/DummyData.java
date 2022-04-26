@@ -33,40 +33,44 @@ public class DummyData {
         sam.setPassword("1234");
         randomizeVisits(sam);
 
-        String johnEmail = "john@gmail.com";
-        User john = new User(johnEmail);
+        User john = new User("John");
         john.setClass1("csci_103");
-        csci_103.addStudent(johnEmail);
+        csci_103.addStudent("John");
         john.setClass2("ee-109");
-        ee_109.addStudent(johnEmail);
+        csci_310.addStudent("John");
+        john.setClass3("csci-310");
+        ee_109.addStudent("John");
         john.setFirstName("Johnny");
         john.setLastName("Test");
         john.setPassword("1234");
-        randomizeVisits(john);
+        john.addVisits("JFF", 54);
+        john.addVisits("SSL", 14);
+        john.addVisits("RTH", 56);
+        john.addVisit("SAL");
+        john.addVisit("HSH");
 
-        String markEmail = "mark@gmail.com";
-        User mark = new User(markEmail);
+        User mark = new User("Mark");
         mark.setClass1("ee-109");
-        ee_109.addStudent(markEmail);
+        ee_109.addStudent("Mark");
         mark.setClass2("csci_310");
-        csci_310.addStudent(markEmail);
+        csci_310.addStudent("Mark");
         mark.setClass3("csci_104");
-        csci_104.addStudent(markEmail);
+        csci_104.addStudent("Mark");
         mark.setFirstName("Marko");
         mark.setLastName("Jacoby");
         mark.setPassword("1234");
         randomizeVisits(mark);
 
-        String sarahEmail = "sarah@gmail.com";
-        User sarah = new User(sarahEmail);
+
+        User sarah = new User("Sarah");
         sarah.setClass1("ee-109");
-        ee_109.addStudent(sarahEmail);
+        ee_109.addStudent("Sarah");
         sarah.setClass2("csci_104");
-        csci_104.addStudent(sarahEmail);
+        csci_104.addStudent("Sarah");
         sarah.setIsInstructor(true);
         sarah.setFirstName("Sarah");
         sarah.setLastName("Hopkins");
-        sarah.setCovidStatus(Status.healthy);
+        sarah.setCovidStatus(Status.infected);
         sarah.setPassword("1234");
         randomizeVisits(sarah);
 

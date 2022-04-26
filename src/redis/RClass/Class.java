@@ -1,11 +1,12 @@
 package redis.RClass;
 
-import org.redisson.api.RList;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import redis.RedisClient;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class Class {
 
@@ -23,6 +24,8 @@ public class Class {
         if(!redisson.getBucket(this.name + ".isInPerson").isExists()) {
             redisson.getBucket(this.name + ".isInPerson").set("true");
             redisson.getSet(this.name + ".students");
+            redisson.getList(this.name + ".notifications");
+            redisson.getBucket(this.name + ".location").set("");
         }
     }
 
@@ -39,15 +42,38 @@ public class Class {
         }
     }
 
+    public String getLocation() {
+        String location = (String) redisson.getBucket(name + ".location").get();
+        return location;
+    }
+
     public List<String> getStudents() {
         RSet<String> rList = redisson.getSet(name + ".students");
-        List<String> students = rList.stream().toList();
-        return students;
+        List<String> strings = new Vector<String>();
+        for(String s : rList) {
+            strings.add(s);
+        }
+        return strings;
+    }
+
+    public List<String> getNotifications() {
+        List<String> notifications = new ArrayList<>();
+        Object[] list = redisson.getList(name + ".notifications").toArray();
+        for(Object o : list) {
+            String s = (String) o;
+            notifications.add(s);
+        }
+
+        return notifications;
     }
 
     public void addStudent(String userId) {
         userId = userId.toLowerCase();
         redisson.getSet(name + ".students").add(userId);
+    }
+
+    public void addNotification(String message) {
+        redisson.getList(name + ".notifications").add(message);
     }
 
     public void setInPerson(boolean willBeInPerson) {
@@ -58,11 +84,17 @@ public class Class {
 
     }
 
+    public void setLocation(String location) {
+        redisson.getBucket(name + ".location").set(location);
+    }
+
     public void delete() {
 
         redisson.getBucket(name + ".isInPerson").delete();
+        redisson.getBucket(name + ".location").delete();
         redisson.getList(name + ".students").clear();
         redisson.getList(name + ".students").delete();
+        redisson.getList(name + ".notifications").delete();
     }
 
 

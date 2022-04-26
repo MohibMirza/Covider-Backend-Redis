@@ -9,6 +9,7 @@ import redis.RClass.*;
 import redis.RClass.Class;
 import redis.RedisClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static redis.RedisDatabase.*;
@@ -112,7 +113,7 @@ public class RedisTest {
     public void userVisitsBuildingTest() {
 
         Building building = new Building("SAL");
-        building.addLastVisit("Jake", "2022-03-25");
+        building.addLastVisit("Jake", "2022-04-20");
         assertTrue(building.checkIfVisitedWithin10Days("Jake"));
 
         User user = new User("Jake");
@@ -183,6 +184,59 @@ public class RedisTest {
 
         phys.delete();
         user.delete();
+    }
+
+    @Test
+    public void userSendNotificationTest() {
+        User user1 = new User("Jacko");
+        User user2 = new User("James");
+        Class class1 = new Class("psyc-100");
+        List<String> userIds = new ArrayList<>();
+        userIds.add("Jacko");
+        userIds.add("James");
+        List<String> classIds = new ArrayList<>();
+        classIds.add("psyc-100");
+
+        Notification notification = new Notification("Hello", userIds, classIds);
+        notification.send();
+        assertEquals(1, user1.getNotifications().size());
+        assertEquals(1, user2.getNotifications().size());
+        assertEquals(1, class1.getNotifications().size());
+        assertEquals("Hello", user2.getNotifications().get(0));
+        assertEquals("Hello", user1.getNotifications().get(0));
+        assertEquals("Hello", class1.getNotifications().get(0));
+
+        user1.delete();
+        user2.delete();
+        class1.delete();
+    }
+
+    @Test
+    public void covidNotificationTest() {
+        Class class1 = new Class("psyc-100");
+        User user1 = new User("Jacko");
+        user1.setClass1("psyc-100");
+        User user2 = new User("Sam");
+        Building building = new Building("RTH");
+
+        user1.addVisit("RTH");
+        user2.addVisit("RTH");
+        building.addVisit("jacko");
+        building.addVisit("Sam");
+
+        user1.setCovidStatus(Status.infected);
+
+        assertEquals(1, user2.getNotifications().size());
+        assertEquals(1, class1.getNotifications().size());
+        System.out.print(user2.getNotifications().get(0));
+
+
+        user1.delete();
+        user2.delete();
+        building.delete();
+        class1.delete();
+
+
     }
 
     @AfterClass
